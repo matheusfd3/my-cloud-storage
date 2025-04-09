@@ -1,11 +1,32 @@
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFiles, saveFiles } from './firebase.js';
 
 let files = [];
 let isPlainText = true;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  files = await getFiles();
-  renderFiles();
+  const auth = getAuth();
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      files = await getFiles();
+      renderFiles();
+    } else {
+      let authSuccess = false;
+      const email = "admin@gmail.com";
+      while (!authSuccess) {
+        const password = prompt("Digite a senha da aplicação:");
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          files = await getFiles();
+          renderFiles();
+          authSuccess = true;
+        } catch (error) {
+          alert("Senha incorreta.");
+          console.error(error);
+        }
+      }
+    }
+  });
 });
 
 function renderFiles() {
@@ -123,7 +144,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 function getFormattedDateTime() {
   const now = new Date();
   const pad = n => n.toString().padStart(2, '0');
-  return `${pad(now.getHours())}:${pad(now.getMinutes())} - ${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
+  return `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}, ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 }
 
 function readFileAsBase64(file) {
