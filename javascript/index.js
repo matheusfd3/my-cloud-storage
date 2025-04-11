@@ -89,7 +89,7 @@ function createCard(file, index, onPrimaryAction, onDelete) {
 
   const p = document.createElement("p");
   p.title = paragraphContent;
-  p.textContent = paragraphContent;
+  p.textContent = limitString(paragraphContent);
 
   div.appendChild(strong);
   div.appendChild(p);
@@ -105,6 +105,10 @@ function createCard(file, index, onPrimaryAction, onDelete) {
   li.appendChild(button);
 
   return li;
+}
+
+function limitString(str) {
+  return str.length > 100 ? str.slice(0, 100) + "..." : str;
 }
 
 document.getElementById("toggle-input-button").addEventListener("click", () => {
