@@ -79,12 +79,20 @@ function createCard(file, index, onPrimaryAction, onDelete) {
     li.appendChild(icon);
   }
 
+  let paragraphContent = file.type === "plain-text" ? file.content : file.fileName;
+
   const div = document.createElement("div");
   div.className = "file-info";
-  div.innerHTML = `
-    <strong>${file.createdAt}</strong>
-    <p>${file.type === "plain-text" ? file.content : file.fileName}</p>
-  `;
+
+  const strong = document.createElement("strong");
+  strong.textContent = file.createdAt;
+
+  const p = document.createElement("p");
+  p.title = paragraphContent;
+  p.textContent = paragraphContent;
+
+  div.appendChild(strong);
+  div.appendChild(p);
   li.appendChild(div);
 
   const button = document.createElement("button");
