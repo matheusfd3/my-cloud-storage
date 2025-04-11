@@ -14,14 +14,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       let authSuccess = false;
       const email = "admin@gmail.com";
       while (!authSuccess) {
-        const password = prompt("Digite a senha da aplicação:");
+        const password = prompt("Código de acesso:");
         try {
           await signInWithEmailAndPassword(auth, email, password);
           files = await getFiles();
           renderFiles();
           authSuccess = true;
         } catch (error) {
-          alert("Senha incorreta.");
+          alert("Código incorreto.");
           console.error(error);
         }
       }
